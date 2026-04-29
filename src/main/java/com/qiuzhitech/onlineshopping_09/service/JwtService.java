@@ -33,13 +33,13 @@ public class JwtService {
                 .compact();
     }
 
-    public String decryptUserName(String token) {
+    public String decryptUserId(String token) {
         Claims body = Jwts.parserBuilder()
                 .setSigningKey(getSigningKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
-        return body.getOrDefault("name", "-1").toString();
+        return body.getOrDefault("id", "-1").toString();
     }
 
     private Key getSigningKey() {
