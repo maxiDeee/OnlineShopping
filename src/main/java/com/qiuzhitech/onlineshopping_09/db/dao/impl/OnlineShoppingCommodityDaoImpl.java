@@ -1,0 +1,39 @@
+package com.qiuzhitech.onlineshopping_09.db.dao.impl;
+
+import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingCommodityDao;
+import com.qiuzhitech.onlineshopping_09.db.mappers.OnlineShoppingCommodityMapper;
+import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
+import org.springframework.stereotype.Repository;
+
+import javax.annotation.Resource;
+import java.util.List;
+
+@Repository
+public class OnlineShoppingCommodityDaoImpl implements OnlineShoppingCommodityDao {
+    /**
+     * @param onlineShoppingCommodity
+     * @return
+     */
+
+    @Resource
+    private OnlineShoppingCommodityMapper onlineShoppingCommodityMapper;
+
+    @Override
+    public int insertCommodity(OnlineShoppingCommodity onlineShoppingCommodity) {
+        return onlineShoppingCommodityMapper.insert(onlineShoppingCommodity);
+    }
+
+    /**
+     * @param commodityId
+     * @return
+     */
+    @Override
+    public OnlineShoppingCommodity selectByCommodityId(long commodityId) {
+        return  onlineShoppingCommodityMapper.selectByPrimaryKey(commodityId);
+    }
+
+    @Override
+    public List<OnlineShoppingCommodity> selectByUserId(long userId) {
+        return onlineShoppingCommodityMapper.selectByUserId(userId);
+    }
+}
