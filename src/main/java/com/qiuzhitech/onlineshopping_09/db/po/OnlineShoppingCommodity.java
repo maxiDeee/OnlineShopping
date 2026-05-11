@@ -3,6 +3,8 @@ package com.qiuzhitech.onlineshopping_09.db.po;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Builder
 @Data
 public class OnlineShoppingCommodity {

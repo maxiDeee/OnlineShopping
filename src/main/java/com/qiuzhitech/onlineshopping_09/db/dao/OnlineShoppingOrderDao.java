@@ -1,13 +1,15 @@
 package com.qiuzhitech.onlineshopping_09.db.dao;
 
+
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
 
+import java.util.List;
+
 public interface OnlineShoppingOrderDao {
-    int insertOrder(OnlineShoppingOrder record);
+    int insertOrder(OnlineShoppingOrder onlineShoppingOrder);
+    OnlineShoppingOrder selectByOrderId(long OrderId);
+    List<OnlineShoppingOrder> listOrders();
+    int updateOrder(OnlineShoppingOrder onlineShoppingOrder);
 
-    int deleteOrderById(Long orderId);
-
-    OnlineShoppingOrder queryOrderById(Long orderId);
-
-    int updateOrder(OnlineShoppingOrder record);
+    OnlineShoppingOrder queryOrderByOrderNum(String orderNum);
 }

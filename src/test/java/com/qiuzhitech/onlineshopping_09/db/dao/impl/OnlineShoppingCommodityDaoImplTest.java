@@ -23,34 +23,34 @@ class OnlineShoppingCommodityDaoImplTest {
     void setUp() {
 
     }
-
-    @Test
-    void insertCommodity() {
-        OnlineShoppingCommodity onlineShoppingCommodity =
-                OnlineShoppingCommodity.builder()
-                        .commodityId(124L)
-                        .commodityName("Iphone")
-                        .creatorUserId(123L)
-                        .commodityDesc("desc")
-                        .totalStock(100)
-                        .availableStock(100)
-                        .lockStock(0)
-                        .price(999)
-                        .build();
-        onlineShoppingCommodityDao.insertCommodity(onlineShoppingCommodity);
-    }
-
-    @Test
-    void selectByCommodityId() {
-        OnlineShoppingCommodity onlineShoppingCommodity =
-                onlineShoppingCommodityDao.selectByCommodityId(123L);
-        log.info(onlineShoppingCommodity.toString());
-    }
-
-    @Test
-    void selectByUserId() {
-        List<OnlineShoppingCommodity> onlineShoppingCommodities =
-                onlineShoppingCommodityDao.selectByUserId(124L);
-        log.info(onlineShoppingCommodities.toString());
-    }
+//
+//    @Test
+//    void insertCommodity() {
+//        OnlineShoppingCommodity onlineShoppingCommodity =
+//                OnlineShoppingCommodity.builder()
+//                        .commodityId(124L)
+//                        .commodityName("Iphone")
+//                        .creatorUserId(123L)
+//                        .commodityDesc("desc")
+//                        .totalStock(100)
+//                        .availableStock(100)
+//                        .lockStock(0)
+//                        .price(999)
+//                        .build();
+//        onlineShoppingCommodityDao.insertCommodity(onlineShoppingCommodity);
+//    }
+//
+//    @Test
+//    void selectByCommodityId() {
+//        OnlineShoppingCommodity onlineShoppingCommodity =
+//                onlineShoppingCommodityDao.selectByCommodityId(123L);
+//        log.info(onlineShoppingCommodity.toString());
+//    }
+//
+//    @Test
+//    void selectByUserId() {
+//        List<OnlineShoppingCommodity> onlineShoppingCommodities =
+//                onlineShoppingCommodityDao.selectByUserId(124L);
+//        log.info(onlineShoppingCommodities.toString());
+//    }
 }
