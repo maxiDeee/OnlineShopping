@@ -5,6 +5,7 @@ import com.qiuzhitech.onlineshopping_09.db.dao.OnlineShoppingOrderDao;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingUser;
+import com.qiuzhitech.onlineshopping_09.service.OrderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,11 +27,15 @@ public class OrderController {
     @Resource
     private OnlineShoppingOrderDao orderDao;
 
+    @Resource
+    private OrderService orderService;
+
     @RequestMapping("/commodity/buy/{userId}/{commodityId}")
     public String BuyCommodity(@PathVariable long userId,
                                @PathVariable long commodityId,
                                Map<String, Object> resultMap) {
-        OnlineShoppingOrder order = createOnlineShoppingOrder(userId, commodityId);
+        // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOriginal(userId, commodityId);
+        OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOneSQL(userId, commodityId);
         if (order != null) {
             resultMap.put("orderNo", order.getOrderNo());
             resultMap.put("resultInfo", "Place order success, orderNo: " + order.getOrderNo());
@@ -61,30 +66,5 @@ public class OrderController {
         order.setOrderStatus(2);
         orderDao.updateOrder(order);
         return OrderCheck(orderNum, resultMap);
-    }
-
-    private OnlineShoppingOrder createOnlineShoppingOrder(long userId,
-                                                          long commodityId) {
-        OnlineShoppingCommodity onlineShoppingCommodity = commodityDao.selectByCommodityId(commodityId);
-        Integer availableStock = onlineShoppingCommodity.getAvailableStock();
-        if (availableStock > 0) {
-            availableStock--;
-            onlineShoppingCommodity.setAvailableStock(availableStock);
-            int result = commodityDao.updateCommodity(onlineShoppingCommodity);
-            if (result == 1) {
-                OnlineShoppingOrder order = OnlineShoppingOrder.builder()
-                        .userId(userId)
-                        .commodityId(commodityId)
-                        .orderNo(UUID.randomUUID().toString())
-                        .orderAmount(1L)
-                        .createTime(new Date())
-                        .orderStatus(1)
-                        .build();
-                orderDao.insertOrder(order);
-                return order;
-            }
-        }
-        log.warn("commodity out of stock, commodityId: " + onlineShoppingCommodity.getCommodityId());
-        return null;
     }
 }
