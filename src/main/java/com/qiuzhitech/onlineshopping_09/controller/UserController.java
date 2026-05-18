@@ -1,6 +1,6 @@
 package com.qiuzhitech.onlineshopping_09.controller;
 
-import com.qiuzhitech.onlineshopping_09.config.MyUser;
+import com.qiuzhitech.onlineshopping_09.db.po.MyUser;
 import com.qiuzhitech.onlineshopping_09.service.JwtService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

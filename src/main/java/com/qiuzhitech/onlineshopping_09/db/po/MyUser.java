@@ -1,4 +1,4 @@
-package com.qiuzhitech.onlineshopping_09.config;
+package com.qiuzhitech.onlineshopping_09.db.po;
 
 import lombok.Data;
 import lombok.AllArgsConstructor;

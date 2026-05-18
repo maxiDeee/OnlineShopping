@@ -1,5 +1,6 @@
 package com.qiuzhitech.onlineshopping_09.config;
 
+import com.qiuzhitech.onlineshopping_09.db.po.MyUser;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -11,12 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.annotation.Resource;
 import java.util.Date;
 import java.util.Map;
-import java.util.UUID;
 
 @Controller
 @Slf4j
@@ -35,7 +33,8 @@ public class OrderController {
                                @PathVariable long commodityId,
                                Map<String, Object> resultMap) {
         // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOriginal(userId, commodityId);
-        OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOneSQL(userId, commodityId);
+        // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOneSQL(userId, commodityId);
+        OnlineShoppingOrder order = orderService.createOnlineShoppingOrderRedis(userId, commodityId);
         if (order != null) {
             resultMap.put("orderNo", order.getOrderNo());
             resultMap.put("resultInfo", "Place order success, orderNo: " + order.getOrderNo());

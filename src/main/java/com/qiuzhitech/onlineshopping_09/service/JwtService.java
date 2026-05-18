@@ -1,6 +1,6 @@
 package com.qiuzhitech.onlineshopping_09.service;
 
-import com.qiuzhitech.onlineshopping_09.config.MyUser;
+import com.qiuzhitech.onlineshopping_09.db.po.MyUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

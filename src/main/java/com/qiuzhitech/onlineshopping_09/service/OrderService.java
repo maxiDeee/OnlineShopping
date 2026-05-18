@@ -20,6 +20,9 @@ public class OrderService {
     @Resource
     private OnlineShoppingOrderDao orderDao;
 
+    @Resource
+    private RedisService redisService;
+
     public OnlineShoppingOrder createOnlineShoppingOrderOriginal(long userId,
                                                                   long commodityId) {
         OnlineShoppingCommodity onlineShoppingCommodity = commodityDao.selectByCommodityId(commodityId);
@@ -43,6 +46,17 @@ public class OrderService {
             return createOrder(userId, commodityId);
         }
         log.warn("commodity out of stock, commodityId: " + commodityId);
+        return null;
+    }
+
+    public OnlineShoppingOrder createOnlineShoppingOrderRedis(long userId,
+                                                              long commodityId) {
+        String redisKey = "online_shopping_commodity:" + commodityId;
+        long remainStock = redisService.deductStock(redisKey);
+        if (remainStock >= 0) {
+            return createOnlineShoppingOrderOriginal(userId, commodityId);
+        }
+        log.warn("commodity out of stock, commodityId:" + commodityId);
         return null;
     }
 
