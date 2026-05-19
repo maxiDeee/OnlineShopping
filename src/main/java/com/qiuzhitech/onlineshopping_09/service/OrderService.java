@@ -55,6 +55,38 @@ public class OrderService {
         long remainStock = redisService.deductStock(redisKey);
         if (remainStock >= 0) {
             return createOnlineShoppingOrderOriginal(userId, commodityId);
+        } else {
+            log.warn("commodity out of stock, commodityId:" + commodityId);
+            return null;
+        }
+    }
+
+    public OnlineShoppingOrder createOnlineShoppingOrderDistributedLock(long userId,
+                                                                        long commodityId) {
+        String requestId = UUID.randomUUID().toString();
+        boolean lockAcquired = redisService.tryToGetDistributeLock(
+                String.valueOf(commodityId), requestId, 5000);
+        if (!lockAcquired) {
+            log.warn("failed to acquire distributed lock, commodityId:" + commodityId);
+            return null;
+        }
+        try {
+            return createOnlineShoppingOrderOriginal(userId, commodityId);
+        } finally {
+            redisService.releaseDistributedLock(String.valueOf(commodityId), requestId);
+        }
+    }
+
+    public OnlineShoppingOrder createOnlineShoppingOrderFinal(long userId,
+                                                              long commodityId) {
+        String redisKey = "online_shopping_commodity:" + commodityId;
+        long remainStock = redisService.deductStock(redisKey);   // 1W
+        if (remainStock >= 0) {
+            // 1K
+            int ret = commodityDao.deductStock(commodityId);// 0: fail to deduct 1: success to deduct
+            if (ret > 0) {
+                return createOrder(userId, commodityId);
+            }
         }
         log.warn("commodity out of stock, commodityId:" + commodityId);
         return null;

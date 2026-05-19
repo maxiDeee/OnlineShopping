@@ -34,7 +34,9 @@ public class OrderController {
                                Map<String, Object> resultMap) {
         // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOriginal(userId, commodityId);
         // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderOneSQL(userId, commodityId);
-        OnlineShoppingOrder order = orderService.createOnlineShoppingOrderRedis(userId, commodityId);
+        // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderRedis(userId, commodityId);
+        // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderDistributedLock(userId, commodityId);
+        OnlineShoppingOrder order = orderService.createOnlineShoppingOrderFinal(userId, commodityId);
         if (order != null) {
             resultMap.put("orderNo", order.getOrderNo());
             resultMap.put("resultInfo", "Place order success, orderNo: " + order.getOrderNo());

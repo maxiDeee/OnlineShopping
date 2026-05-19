@@ -61,4 +61,29 @@ public class RedisService {
         stock = (Long)jedis.eval(script, Collections.singletonList(redisKey), Collections.emptyList());
         return stock;
     }
+
+    public boolean tryToGetDistributeLock(String commodityId, String requestId,  int timeoutInMillSeconds) {
+        Jedis jedis = jedisPool.getResource();
+        String redisKey = "commodityLock:" + commodityId;
+        String ret = jedis.set(redisKey, requestId, "NX", "PX", timeoutInMillSeconds);
+        jedis.close();
+        return ("OK").equals(ret);              // NPE prevent
+    }
+
+    public boolean releaseDistributedLock(String commodityId, String requestId) {
+        Jedis jedis = jedisPool.getResource();
+        String redisKey = "commodityLock:" + commodityId;
+        // Atomically compare requestId and delete — prevents releasing a lock owned by another request
+        String script =
+                "if redis.call('get', KEYS[1]) == ARGV[1] then\n" +
+                        "    return redis.call('del', KEYS[1])\n" +
+                        "else\n" +
+                        "    return 0\n" +
+                        "end";
+        Long result = (Long) jedis.eval(script,
+                Collections.singletonList(redisKey),
+                Collections.singletonList(requestId));
+        jedis.close();
+        return result == 1L;        // 1: release succeed   0: release fail (key invalid or value doesn't exist)
+    }
 }
