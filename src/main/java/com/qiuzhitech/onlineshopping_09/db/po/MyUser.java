@@ -1,13 +1,15 @@
 package com.qiuzhitech.onlineshopping_09.db.po;
 
-import lombok.Data;
 import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class MyUser {
-    int id;
-    String name;
-    int age;
-    String email;
+    private Integer id;
+    private String name;
+    private Integer age;
+    private String email;
 }
