@@ -48,3 +48,9 @@ build/
 
 ### macOS ###
 .DS_Store
+
+### Archives / Docker images ###
+*.tar
+*.tar.gz
+*.tgz
+*.zip

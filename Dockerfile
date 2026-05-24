@@ -1,4 +1,9 @@
-FROM ubuntu:latest
-LABEL authors="hongyu"
+FROM public.ecr.aws/amazoncorretto/amazoncorretto:8
 
-ENTRYPOINT ["top", "-b"]
+VOLUME /tmp
+
+ENV DB_HOST=mysql
+#ENV REDIS_HOST=redis
+
+COPY target/*.jar app.jar
+ENTRYPOINT ["java", "-jar", "/app.jar"]
