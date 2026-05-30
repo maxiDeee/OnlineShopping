@@ -6,6 +6,7 @@ import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingOrder;
 import com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingUser;
 import com.qiuzhitech.onlineshopping_09.service.OrderService;
+import com.qiuzhitech.onlineshopping_09.service.RedisService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,6 +29,9 @@ public class OrderController {
     @Resource
     private OrderService orderService;
 
+    @Resource
+    private RedisService redisService;
+
     @RequestMapping("/commodity/buy/{userId}/{commodityId}")
     public String BuyCommodity(@PathVariable long userId,
                                @PathVariable long commodityId,
@@ -38,6 +42,7 @@ public class OrderController {
         // OnlineShoppingOrder order = orderService.createOnlineShoppingOrderDistributedLock(userId, commodityId);
         OnlineShoppingOrder order = orderService.createOnlineShoppingOrderFinal(userId, commodityId);
         if (order != null) {
+            redisService.addToDenyList(String.valueOf(userId), String.valueOf(commodityId));
             resultMap.put("orderNo", order.getOrderNo());
             resultMap.put("resultInfo", "Place order success, orderNo: " + order.getOrderNo());
         } else {

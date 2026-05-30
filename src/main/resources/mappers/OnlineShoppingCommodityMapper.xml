@@ -139,8 +139,13 @@
   </update>
   <update id="deductStock">
     update online_shopping_commodity
-    set available_stock = available_stock - 1
+    set available_stock = available_stock - 1, lock_stock = lock_stock + 1
     where commodity_id = #{commodityId,jdbcType=BIGINT} and
     available_stock > 0
   </update>
+    <update id="reverseStock">
+      update online_shopping_commodity
+      set available_stock = available_stock + 1, lock_stock = lock_stock - 1
+      where commodity_id = #{commodityId,jdbcType=BIGINT}
+    </update>
 </mapper>

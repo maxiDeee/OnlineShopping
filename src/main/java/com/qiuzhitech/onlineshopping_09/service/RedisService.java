@@ -1,5 +1,6 @@
 package com.qiuzhitech.onlineshopping_09.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class RedisService {
     @Resource
     JedisPool jedisPool;
@@ -59,7 +61,15 @@ public class RedisService {
                     "return -1;";
         Long stock = -1L;
         stock = (Long)jedis.eval(script, Collections.singletonList(redisKey), Collections.emptyList());
+        jedis.close();
         return stock;
+    }
+
+    public long revertStock(String redisKey) {
+        Jedis jedis = jedisPool.getResource();
+        long incr = jedis.incr(redisKey);
+        jedis.close();
+        return incr;
     }
 
     public boolean tryToGetDistributeLock(String commodityId, String requestId,  int timeoutInMillSeconds) {
@@ -85,5 +95,29 @@ public class RedisService {
                 Collections.singletonList(requestId));
         jedis.close();
         return result == 1L;        // 1: release succeed   0: release fail (key invalid or value doesn't exist)
+    }
+
+    public void addToDenyList(String userId, String commodityId) {
+        Jedis jedis = jedisPool.getResource();
+        String redisKey = "online_shopping:denyListUserId:" + userId;
+        jedis.sadd(redisKey, commodityId);
+        jedis.close();
+        log.info("Add userId: {} into denyList for commodityId: {}", userId, commodityId);
+    }
+
+    public void removeFromDenyList(String userId, String commodityId) {
+        Jedis jedis = jedisPool.getResource();
+        String redisKey = "online_shopping:denyListUserId:" + userId;
+        jedis.srem(redisKey, commodityId);
+        jedis.close();
+        log.info("Remove userId: {} from denyList for commodityId: {}", userId, commodityId);
+    }
+
+    public boolean isInDenyList(String userId, String commodityId) {
+        Jedis jedis = jedisPool.getResource();
+        String redisKey = "online_shopping:denyListUserId:" + userId;
+        Boolean res = jedis.sismember(redisKey, commodityId);
+        jedis.close();
+        return res;
     }
 }

@@ -44,4 +44,22 @@ public class RocketMQService {
             throw new RuntimeException(e);
         }
     }
+
+    public void sendDelayMessage(String topic, String messageBody, int delayTimeLevel) {
+        Message msg = new Message(topic, messageBody.getBytes());
+        // messageDelayLevel=1s 5s 10s 30s 1m 2m 3m 4m 5m 6m 7m 8m 9m 10m 20m 30m 1h 2h
+        msg.setDelayTimeLevel(delayTimeLevel);
+        try {
+            rocketMQTemplate.getProducer().
+                    send(msg, (mqs, message, arg) -> mqs.get(0), null);
+        } catch (MQClientException e) {
+            throw new RuntimeException(e);
+        } catch (RemotingException e) {
+            throw new RuntimeException(e);
+        } catch (MQBrokerException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
