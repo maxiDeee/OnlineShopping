@@ -45,6 +45,13 @@ public class RedisService {
         return res;
     }
 
+    public Map<String, String> getMapValue(String key) {
+        Jedis jedis = jedisPool.getResource();
+        Map<String, String> res = jedis.hgetAll(key);
+        jedis.close();
+        return res;
+    }
+
     public long deductStock(String redisKey) {
         Jedis jedis = jedisPool.getResource();
         String script =

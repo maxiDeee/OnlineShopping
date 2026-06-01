@@ -97,10 +97,10 @@ public class OrderService {
             rocketMQService.sendFIFOMessage("createOrder", JSON.toJSONString(order));
             log.info("Place order successfully");
             return order;
-//            // 1K
-//            int ret = commodityDao.deductStock(commodityId);// 0: fail to deduct 1: success to deduct
-//            if (ret > 0) {
-//                return createOrder(userId, commodityId);
+//          // 1K
+//          int ret = commodityDao.deductStock(commodityId);// 0: fail to deduct 1: success to deduct
+//          if (ret > 0) {
+//              return createOrder(userId, commodityId);
         }
         log.warn("commodity out of stock, commodityId:" + commodityId);
         return null;
