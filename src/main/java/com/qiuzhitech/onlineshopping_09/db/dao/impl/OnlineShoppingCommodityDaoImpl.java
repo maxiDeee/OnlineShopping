@@ -57,4 +57,9 @@ public class OnlineShoppingCommodityDaoImpl implements OnlineShoppingCommodityDa
         return onlineShoppingCommodityMapper.reverseStock(commodityId);
     }
 
+    @Override
+    public List<OnlineShoppingCommodity> searchCommodityByKeyword(String keyword) {
+        return onlineShoppingCommodityMapper.searchCommodityByKeyword('%' + keyword + '%');
+    }
+
 }

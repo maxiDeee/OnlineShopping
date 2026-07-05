@@ -32,6 +32,13 @@
       <include refid="Base_Column_List" />
       from online_shopping_commodity
     </select>
+    <select id="searchCommodityByKeyword"
+            resultType="com.qiuzhitech.onlineshopping_09.db.po.OnlineShoppingCommodity">
+      select
+      <include refid="Base_Column_List" />
+      from online_shopping_commodity
+      where commodity_desc like #{keywordPattern,jdbcType=VARCHAR}
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from online_shopping_commodity
     where commodity_id = #{commodityId,jdbcType=BIGINT}
